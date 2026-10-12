@@ -37,11 +37,17 @@ Spring Boot 멀티 모듈(core / api / admin) 구조의 여행 예약 플랫폼.
 [![repo](https://img.shields.io/badge/GitHub-UR--ARGUS%2FARGUS__Merge-181717?logo=github)](https://github.com/UR-ARGUS/ARGUS_Merge)
 `Python` `FastAPI` `Docker` `Selenium`
 
-SK쉴더스 WEB/API 개발 보안 가이드(2022) 항목을 자동 진단하고 증적 스크린샷과 결과서(HTML → PDF)를 만들어 주는 도구. **"요청 및 응답 값 내 주요정보 포함 여부"(5-2) 항목의 진단 · 증적 · 결과서 엔진을 담당**했습니다.
+SK쉴더스 WEB/API 개발 보안 가이드(2022) 항목을 자동 진단하고 증적 스크린샷과 결과서(HTML → PDF)를 만들어 주는 도구. **"SSRF / File Inclusion 진단 엔진"과 "요청 및 응답 값 내 주요정보 포함 여부" 항목의 증적 · 결과서 엔진을 담당**했습니다. (코드는 `dev` 브랜치)
 
-- [진단](https://github.com/UR-ARGUS/ARGUS_Merge/tree/dev/backend/diagnosis/modules/5-2) · [증적](https://github.com/UR-ARGUS/ARGUS_Merge/tree/dev/backend/screenshot/modules/5-2) · [결과서](https://github.com/UR-ARGUS/ARGUS_Merge/tree/dev/backend/report/modules/5-2) 를 **각각 독립 실행 가능한 모듈 3개**로 분리 (코드는 `dev` 브랜치)
-- 요청/응답 본문에서 이메일 · 전화번호 · 주민번호 · 카드번호 등 주요정보를 규칙 기반(체크섬 · Luhn 검증)으로 탐지
-- 브라우저 화면과 요청/응답 값을 함께 담는 **증적 스크린샷 엔진**, 진단 결과를 공통 형식의 HTML 결과서로 병합해 PDF 자동 렌더링
+**1-4 SSRF / File Inclusion 진단 엔진** · [코드](https://github.com/UR-ARGUS/ARGUS_Merge/tree/dev/backend/diagnosis/modules/1-4)
+- OpenAPI(Swagger) · URL 목록 입력을 정규화하고, 파라미터 이름 · 스키마로 SSRF / LFI / RFI 의심 파라미터를 정적 탐색
+- baseline 응답 비교, 반복 타이밍 측정, 저장 후 재조회로 판정하고 OWASP ZAP Active Scan 결과를 병합, 결과마다 `HIGH / MEDIUM / LOW` 신뢰도와 근거를 기록
+- 다중 역할 계정 로그인 · 401 시 토큰 갱신 후 재시도, 역할별 결과 중복 제거, `unittest` 테스트 6종
+- 응답 차이와 지연만으로는 정상 기능과 공격 성공을 구분하기 어렵고 외부 콜백(OOB) 검증을 기간 안에 갖추기 어려워, 검증 끝에 **팀 논의로 자동 진단에서 수동 진단 항목으로 전환**
+
+**5-2 증적 · 결과서** · [증적](https://github.com/UR-ARGUS/ARGUS_Merge/tree/dev/backend/screenshot/modules/5-2) · [결과서](https://github.com/UR-ARGUS/ARGUS_Merge/tree/dev/backend/report/modules/5-2)
+- 브라우저 화면과 요청/응답 값을 함께 담는 **증적 스크린샷 엔진**, 재진단 시 이전 스크린샷 자동 정리
+- 진단 결과를 공통 형식의 HTML 결과서로 병합해 PDF 자동 렌더링
 
 ---
 
